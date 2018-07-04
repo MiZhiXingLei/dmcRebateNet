@@ -1,7 +1,14 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
-
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+ 	
+ 	<!--  <filter>
+      <filter-name>HeaderFilter</filter-name>
+      <filter-class>com.dmc.filter.HeaderFilter</filter-class>你过滤器的包
+    </filter>
+    <filter-mapping>
+      <filter-name>HeaderFilter</filter-name>
+      <url-pattern>/*</url-pattern>你开放的接口前缀 
+    </filter-mapping> -->
+ 	
 </web-app>
+
