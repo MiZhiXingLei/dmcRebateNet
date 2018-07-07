@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmc.dao.UseraddsMapper">
+  <resultMap id="BaseResultMap" type="com.dmc.entity.Useradds">
+    <id column="addId" jdbcType="BIGINT" property="addid" />
+    <result column="userId" jdbcType="BIGINT" property="userid" />
+    <result column="uAdd" jdbcType="VARCHAR" property="uadd" />
+    <result column="detailAdd" jdbcType="VARCHAR" property="detailadd" />
+    <result column="reciverName" jdbcType="VARCHAR" property="recivername" />
+    <result column="reciverPhone" jdbcType="VARCHAR" property="reciverphone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    addId, userId, uAdd, detailAdd, reciverName, reciverPhone
+  </sql>
+  <select id="querUserAdd" parameterType="long" resultMap="BaseResultMap">
+  select * from useradds where userId = #{userid}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from useradds
+    where addId = #{addid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from useradds
+    where addId = #{addid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.dmc.entity.Useradds">
+    insert into useradds (addId, userId, uAdd, 
+      detailAdd, reciverName, reciverPhone
+      )
+    values (#{addid,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{uadd,jdbcType=VARCHAR}, 
+      #{detailadd,jdbcType=VARCHAR}, #{recivername,jdbcType=VARCHAR}, #{reciverphone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dmc.entity.Useradds">
+    insert into useradds
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="addid != null">
+        addId,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="uadd != null">
+        uAdd,
+      </if>
+      <if test="detailadd != null">
+        detailAdd,
+      </if>
+      <if test="recivername != null">
+        reciverName,
+      </if>
+      <if test="reciverphone != null">
+        reciverPhone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="addid != null">
+        #{addid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="uadd != null">
+        #{uadd,jdbcType=VARCHAR},
+      </if>
+      <if test="detailadd != null">
+        #{detailadd,jdbcType=VARCHAR},
+      </if>
+      <if test="recivername != null">
+        #{recivername,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverphone != null">
+        #{reciverphone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dmc.entity.Useradds">
+    update useradds
+    <set>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="uadd != null">
+        uAdd = #{uadd,jdbcType=VARCHAR},
+      </if>
+      <if test="detailadd != null">
+        detailAdd = #{detailadd,jdbcType=VARCHAR},
+      </if>
+      <if test="recivername != null">
+        reciverName = #{recivername,jdbcType=VARCHAR},
+      </if>
+      <if test="reciverphone != null">
+        reciverPhone = #{reciverphone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where addId = #{addid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dmc.entity.Useradds">
+    update useradds
+    set userId = #{userid,jdbcType=BIGINT},
+      uAdd = #{uadd,jdbcType=VARCHAR},
+      detailAdd = #{detailadd,jdbcType=VARCHAR},
+      reciverName = #{recivername,jdbcType=VARCHAR},
+      reciverPhone = #{reciverphone,jdbcType=VARCHAR}
+    where addId = #{addid,jdbcType=BIGINT}
+  </update>
+</mapper>

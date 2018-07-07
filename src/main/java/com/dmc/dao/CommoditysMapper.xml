@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmc.dao.CommoditysMapper">
+  <resultMap id="BaseResultMap" type="com.dmc.entity.Commoditys">
+    <id column="comId" jdbcType="BIGINT" property="comid" />
+    <result column="cdyType" jdbcType="BIGINT" property="cdytype" />
+    <result column="comName" jdbcType="VARCHAR" property="comname" />
+    <result column="comPrice" jdbcType="DECIMAL" property="comprice" />
+    <result column="comDisPrice" jdbcType="DECIMAL" property="comdisprice" />
+    <result column="comNum" jdbcType="BIGINT" property="comnum" />
+    <result column="comImg" jdbcType="VARCHAR" property="comimg" />
+    <result column="comRank" jdbcType="VARCHAR" property="comrank" />
+    <result column="comDescribe" jdbcType="VARCHAR" property="comdescribe" />
+  </resultMap>
+  
+  <!-- 删除商品 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from commoditys
+    where comId = #{comid,jdbcType=BIGINT}
+  </delete>
+  
+  <!-- 增加商品 -->
+  <insert id="insert" parameterType="com.dmc.entity.Commoditys">
+    insert into commoditys (comId, cdyType, comName, 
+      comPrice, comDisPrice, comNum, 
+      comImg, comRank, comDescribe
+      )
+    values (#{comid,jdbcType=BIGINT}, #{cdytype,jdbcType=BIGINT}, #{comname,jdbcType=VARCHAR}, 
+      #{comprice,jdbcType=DECIMAL}, #{comdisprice,jdbcType=DECIMAL}, #{comnum,jdbcType=BIGINT}, 
+      #{comimg,jdbcType=VARCHAR}, #{comrank,jdbcType=VARCHAR}, #{comdescribe,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <!-- 更新商品 -->
+  <update id="updateByPrimaryKey" parameterType="com.dmc.entity.Commoditys">
+    update commoditys
+    set cdyType = #{cdytype,jdbcType=BIGINT},
+      comName = #{comname,jdbcType=VARCHAR},
+      comPrice = #{comprice,jdbcType=DECIMAL},
+      comDisPrice = #{comdisprice,jdbcType=DECIMAL},
+      comNum = #{comnum,jdbcType=BIGINT},
+      comImg = #{comimg,jdbcType=VARCHAR},
+      comRank = #{comrank,jdbcType=VARCHAR},
+      comDescribe = #{comdescribe,jdbcType=VARCHAR}
+    where comId = #{comid,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 查询商品 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select comId, cdyType, comName, comPrice, comDisPrice, comNum, comImg, comRank, comDescribe
+    from commoditys
+    where comId = #{comid,jdbcType=BIGINT}
+  </select>
+  
+  <!--   查询所有商品 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select comId, cdyType, comName, comPrice, comDisPrice, comNum, comImg, comRank, comDescribe
+    from commoditys
+  </select>
+</mapper>

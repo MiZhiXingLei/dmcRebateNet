@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmc.dao.ShopsMapper">
+  <resultMap id="BaseResultMap" type="com.dmc.entity.Shops">
+    <id column="shopId" jdbcType="BIGINT" property="shopid" />
+    <id column="prodId" jdbcType="BIGINT" property="prodid" />
+    <result column="qty" jdbcType="INTEGER" property="qty" />
+    <result column="proTotamt" jdbcType="DECIMAL" property="prototamt" />
+    <association property="commoditys" javaType="com.dmc.entity.Commoditys">
+        <id column="comId" jdbcType="BIGINT" property="comid" />
+        <result column="cdyType" jdbcType="BIGINT" property="cdytype" />
+        <result column="comName" jdbcType="VARCHAR" property="comname" />
+        <result column="comPrice" jdbcType="DECIMAL" property="comprice" />
+        <result column="comDisPrice" jdbcType="DECIMAL" property="comdisprice" />
+        <result column="comNum" jdbcType="BIGINT" property="comnum" />
+        <result column="comImg" jdbcType="VARCHAR" property="comimg" />
+        <result column="comRank" jdbcType="VARCHAR" property="comrank" />
+        <result column="comDescribe" jdbcType="VARCHAR" property="comdescribe" />
+    </association>
+  </resultMap>
+  
+  <!-- 删除购物车中的商品 -->
+  <delete id="deleteByPrimaryKey">
+    delete from shops
+    where shopId = #{shopid,jdbcType=BIGINT}
+      and prodId = #{prodid,jdbcType=BIGINT}
+  </delete>
+  
+  <!-- 批量删除 -->
+  <delete id="deleteShops">
+    delete from shops where shopId = #{shopid,jdbcType=BIGINT} and prodId in
+    <foreach item="item" index="index" collection="prodid"
+      open="(" separator="," close=")">
+        #{item}
+     </foreach>
+  </delete>
+  
+  <!-- 清空购物车 -->
+  <delete id="deleteAll">
+    delete from shops
+    where shopId = #{shopid,jdbcType=BIGINT}
+  </delete>
+ 
+  <!-- 添加购物车中的商品  -->
+  <insert id="insert" parameterType="com.dmc.entity.Shops">
+    insert into shops (shopId, prodId, qty, proTotamt)
+    values (#{shopid,jdbcType=BIGINT}, #{prodid,jdbcType=BIGINT}, #{qty,jdbcType=INTEGER}, #{prototamt,jdbcType=DECIMAL})
+  </insert>
+  
+  <!-- 修改购物车中的商品 -->
+  <update id="updateByPrimaryKey" parameterType="com.dmc.entity.Shops">
+    update shops
+    set qty = #{qty,jdbcType=INTEGER}, proTotamt = #{prototamt,jdbcType=DECIMAL}
+    where shopId = #{shopid,jdbcType=BIGINT}
+      and prodId = #{prodid,jdbcType=BIGINT}
+  </update>
+ 
+  <!-- 查询购物车中的商品 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select s.shopId, s.prodId, s.qty, s.proTotamt,c.comName,c.comPrice,c.comDisPrice,c.comNum,c.comImg,c.comRank
+    from shops as s inner join commoditys as c on s.prodId=c.comId 
+    <where>
+       <if test="prodid != 0">
+          shopId = #{shopid,jdbcType=BIGINT} and prodId = #{prodid,jdbcType=BIGINT}
+       </if>
+       <if test="prodid == 0">
+          shopId = #{shopid,jdbcType=BIGINT}
+       </if>
+    </where>
+  </select>
+  
+  <!-- 获取购物车中商品的总价 -->
+  <select id="selectAllSum" resultType="double">
+    SELECT SUM(s.proTotamt) allSum FROM shops s WHERE shopId = #{shopid,jdbcType=BIGINT} and prodId in
+    <foreach item="item" index="index" collection="prodid"
+      open="(" separator="," close=")">
+        #{item}
+     </foreach>
+  </select>
+  
+  <!-- 查询购物车表中的所有数据 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select shopId, prodId, qty, proTotamt
+    from shops
+  </select>
+</mapper>

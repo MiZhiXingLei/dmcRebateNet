@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <!-- 映射文件  有一个  namespace -->
+<mapper namespace="com.dmc.dao.MemberMapper">
+  <!-- select  查询  Id 是定义的dao接口中的方法名   resultType 方法的返回值是什么类型   #{id}  参数信息-->
+  
+  <resultMap id="MemberMap" type="com.dmc.entity.Member">
+    <id column="userId" jdbcType="BIGINT" property="memberId" />  <!-- 用户编号 -->
+    <result column="shopId" jdbcType="BIGINT" property="memberShop" />  <!-- 购物车编号 -->
+    <result column="userName" jdbcType="VARCHAR" property="memberName" />  <!-- 用户名 -->
+    <result column="userPassword" jdbcType="VARCHAR" property="memberPwd" />  <!-- 用户密码 -->
+    <result column="widthPassword" jdbcType="VARCHAR" property="memberWidthPwd" />  <!-- 加盐 -->
+    <result column="userGrade" jdbcType="INTEGER" property="memberGrade" />  <!-- 用户等级 -->
+    <result column="userBlance" jdbcType="DECIMAL" property="memberBlance" />  <!-- 用户余额 -->
+    <result column="userRegist" jdbcType="VARCHAR" property="memberPhone" />  <!-- 用户电话 -->
+    <result column="userRtime" jdbcType="VARCHAR" property="memberDate" />  <!-- 用户注册时间 -->
+    <result column="userSco" jdbcType="DECIMAL" property="memberSco" />  <!-- 用户积分 -->
+    <result column="userSex" jdbcType="VARCHAR" property="memberSex" />  <!-- 用户性别 -->
+    <result column="userEmail" jdbcType="VARCHAR" property="memberEmail" />  <!-- 用户邮箱 -->
+    <result column="userState" jdbcType="INTEGER" property="memberStatus" />  <!-- 用户状态 -->
+    <result column="userPhoto" jdbcType="VARCHAR" property="memberPhoto" />  <!-- 用户头像 -->
+    <result column="userDel" jdbcType="INTEGER" property="memberDel" />  <!-- 用户删除状态 -->
+    <result column="userRemark" jdbcType="INTEGER" property="memberRemark" />  <!-- 用户简介 -->
+  </resultMap> 
+
+  <!-- 精确查询单个 -->
+  <select id="queryMember" resultMap="MemberMap" parameterType="java.util.Map">
+     select * from users
+     <where>
+        <if test="memberName != null">
+            userName = #{memberName} and userDel=#{memberDel}
+        </if>
+        <if test="memberPwd != null">
+           and userPwd = #{memberPwd}
+        </if>
+     </where>
+  </select>
+  
+  <!-- 分页查询  -->
+  <select id="queryByPage" resultMap="MemberMap" parameterType="java.util.Map">
+     SELECT * FROM users 
+     <where>
+      <if test="memberLike != null and memberLikes == ''">
+           userDel=#{memberDel} and (userName like CONCAT('%', #{memberLike}, '%') or userRegist like CONCAT('%', #{memberLike}, '%') or userEmail like CONCAT('%', #{memberLike}, '%'))
+      </if>
+      <if test="memberLike == '' and memberLikes != ''">
+           userDel=#{memberDel} and (userName like CONCAT('%', #{memberLikes}, '%') or userRegist like CONCAT('%', #{memberLikes}, '%') or userEmail like CONCAT('%', #{memberLikes}, '%'))
+      </if>
+      <if test="memberLike != '' and memberLikes != ''">
+           userDel=#{memberDel} and (userName like CONCAT('%', #{memberLike}, '%') or userRegist like CONCAT('%', #{memberLike}, '%') or userEmail like CONCAT('%', #{memberLike}, '%'))
+      </if>
+      <if test="preDate != '' and nextDate != ''">
+           and (userDate between #{preDate} and #{nextDate})
+      </if>
+      <if test="preDate != '' and nextDate == ''">
+           and (userDate between #{preDate} and '3000-01-01')
+      </if>
+      <if test="preDate == '' and nextDate != ''">
+           and (userDate between '2000-01-01' and #{nextDate})
+      </if>
+    </where>
+    <if test="method != null">
+          ORDER BY ${method}
+    </if>
+     LIMIT ${start},${size} 
+  </select>
+  
+  <!-- 查询总记录数  -->
+  <select id="queryRecordsTotal" resultType="int">
+     SELECT COUNT(*) FROM users where userDel=#{memberDel}
+  </select>
+  
+  <!-- 查询过滤后的记录数  -->
+  <select id="queryRecordsFiltered" resultType="int" parameterType="java.util.Map">
+     SELECT COUNT(*) FROM users 
+     <where>
+      <if test="memberLike != null">
+          userDel=#{memberDel} and (userName like CONCAT('%', #{memberLike}, '%') or userRegist like CONCAT('%', #{memberLike}, '%') or userEmail like CONCAT('%', #{memberLike}, '%'))
+      </if>
+    </where> 
+  </select>
+  
+  <!-- 增加成员 -->
+  <insert id="addMember" parameterType="com.dmc.entity.Member">
+     insert into users values(#{memberId},#{memberShop},#{memberName},#{memberPwd},#{memberWidthPwd},#{memberGrade},#{memberBlance},#{memberPhone},#{memberDate},#{memberSco},#{memberSex},#{memberEmail},#{memberStatus},#{memberPhoto},#{memberDel},#{memberRemark})
+  </insert>
+  
+  <!-- 修改成员删除状态（单个） -->
+  <update id="updMemberDel">
+      update users set userDel=#{memberDel} where userId=#{memberId}
+  </update>
+  
+  <!-- 修改成员删除状态（批量） -->
+  <update id="updMembersDel">
+      update users set userDel=#{memberDel} where userId in
+      <foreach item="item" index="index" collection="memberIds"
+      open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </update>
+  
+  <!-- 删除（单个） -->
+  <delete id="delMember">
+     delete from users where userId=#{memberId}
+  </delete>
+  
+  <!-- 删除成员（可批量删除） -->
+  <delete id="delMembers" parameterType="java.util.List">
+     delete from users where userId in
+     <foreach item="item" index="index" collection="list"
+      open="(" separator="," close=")">
+        #{item}
+     </foreach>
+  </delete>
+  
+  <!-- 修改成员其他属性 -->
+  <update id="updMemberOther" parameterType="com.dmc.entity.Member">
+  update users
+    <set>
+      <if test="memberName != null">userName=#{memberName},</if>
+      <if test="memberPhone != null">userRegist=#{memberPhone},</if>
+      <if test="memberEmail != null">userEmail=#{memberEmail},</if>
+      <if test="memberPhoto != null">userPhoto=#{memberPhoto},</if>
+      <if test="memberBlance != null">userBlance=#{memberBlance},</if>
+      <if test="memberRemark != null">userRemark=#{memberRemark},</if>
+      <if test="memberSex != null">userSex=#{memberSex},</if>
+      <if test="memberSco != null">userSco=#{memberSco},</if>
+    </set>
+  where userId=#{memberId}
+  </update>
+  
+  <!-- 修改成员状态 -->
+  <update id="updMemberStatus">
+      update users set userState=#{memberStatus} where userId=#{memberId}
+  </update>
+  
+  <!-- 修改成员密码 -->
+  <update id="updMemberPwd">
+      update users set userPassword=#{memberPwd} where userId=#{memberId}
+  </update>
+</mapper>
