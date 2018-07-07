@@ -34,7 +34,7 @@
             userName = #{memberName} and userDel=#{memberDel}
         </if>
         <if test="memberPwd != null">
-           and userPwd = #{memberPwd}
+           and userPassword = #{memberPwd}
         </if>
      </where>
   </select>

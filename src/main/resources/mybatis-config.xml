@@ -40,7 +40,6 @@
 		<property name="filters" value="mergeStat" />
 	</bean>
 
-
 	<!-- 配置sqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
