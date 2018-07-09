@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dmc.dao.orderlistMapper">
+  <resultMap id="BaseResultMap" type="com.dmc.entity.orderlist">
+    <id column="orderId" jdbcType="BIGINT" property="orderid" />
+    <result column="use_userId" jdbcType="BIGINT" property="useUserid" />
+    <result column="userId" jdbcType="BIGINT" property="userid" />
+    <result column="orderTime" jdbcType="DATE" property="ordertime" />
+    <result column="orderState" jdbcType="INTEGER" property="orderstate" />
+    <result column="orderFlowState" jdbcType="INTEGER" property="orderflowstate" />
+    <result column="orderMoney" jdbcType="DECIMAL" property="ordermoney" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    orderId, use_userId, userId, orderTime, orderState, orderFlowState, orderMoney
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orderlist
+    where orderId = #{orderid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from orderlist
+    where orderId = #{orderid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.dmc.entity.orderlist">
+    insert into orderlist (orderId, use_userId, userId, 
+      orderTime, orderState, orderFlowState, 
+      orderMoney)
+    values (#{orderid,jdbcType=BIGINT}, #{useUserid,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, 
+      #{ordertime,jdbcType=DATE}, #{orderstate,jdbcType=INTEGER}, #{orderflowstate,jdbcType=INTEGER}, 
+      #{ordermoney,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dmc.entity.orderlist">
+    insert into orderlist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        orderId,
+      </if>
+      <if test="useUserid != null">
+        use_userId,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="ordertime != null">
+        orderTime,
+      </if>
+      <if test="orderstate != null">
+        orderState,
+      </if>
+      <if test="orderflowstate != null">
+        orderFlowState,
+      </if>
+      <if test="ordermoney != null">
+        orderMoney,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        #{orderid,jdbcType=BIGINT},
+      </if>
+      <if test="useUserid != null">
+        #{useUserid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="ordertime != null">
+        #{ordertime,jdbcType=DATE},
+      </if>
+      <if test="orderstate != null">
+        #{orderstate,jdbcType=INTEGER},
+      </if>
+      <if test="orderflowstate != null">
+        #{orderflowstate,jdbcType=INTEGER},
+      </if>
+      <if test="ordermoney != null">
+        #{ordermoney,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dmc.entity.orderlist">
+    update orderlist
+    <set>
+      <if test="useUserid != null">
+        use_userId = #{useUserid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="ordertime != null">
+        orderTime = #{ordertime,jdbcType=DATE},
+      </if>
+      <if test="orderstate != null">
+        orderState = #{orderstate,jdbcType=INTEGER},
+      </if>
+      <if test="orderflowstate != null">
+        orderFlowState = #{orderflowstate,jdbcType=INTEGER},
+      </if>
+      <if test="ordermoney != null">
+        orderMoney = #{ordermoney,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where orderId = #{orderid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dmc.entity.orderlist">
+    update orderlist
+    set use_userId = #{useUserid,jdbcType=BIGINT},
+      userId = #{userid,jdbcType=BIGINT},
+      orderTime = #{ordertime,jdbcType=DATE},
+      orderState = #{orderstate,jdbcType=INTEGER},
+      orderFlowState = #{orderflowstate,jdbcType=INTEGER},
+      orderMoney = #{ordermoney,jdbcType=DECIMAL}
+    where orderId = #{orderid,jdbcType=BIGINT}
+  </update>
+</mapper>
