@@ -3,11 +3,14 @@ package com.dmc.dao;
 import com.dmc.entity.Commoditys;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * ≥÷æ√≤„
  * @author –Ï—Ô 2018-07-03
  *
  */
+@Repository(value = "commoditysMapper")
 public interface CommoditysMapper {
     
 	/**

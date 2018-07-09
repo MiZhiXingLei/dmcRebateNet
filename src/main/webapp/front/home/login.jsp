@@ -94,7 +94,7 @@
 									 data:{"memberName":$("#user").val(),"memberPwd":$("#password").val()},
 									 success:function(result){
 										 if(result=="ok"){
-											 location.href="${pageContext.request.contextPath}/front/home/home.html";
+											 location.href="${pageContext.request.contextPath}/front/home/home.jsp";
 										 }else{
 											 alert("登入失败请输入正确的密码和用户");
 										 }

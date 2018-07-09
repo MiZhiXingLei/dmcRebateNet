@@ -36,6 +36,16 @@ public class Commoditys {
 		this.comdescribe = comdescribe;
 	}
 
+	public Commoditys(Long comid, String comname, Double comprice, Double comdisprice, String comimg, String comrank) {
+		super();
+		this.comid = comid;
+		this.comname = comname;
+		this.comprice = comprice;
+		this.comdisprice = comdisprice;
+		this.comimg = comimg;
+		this.comrank = comrank;
+	}
+
 	public Commoditys(Long comid, Double comprice, Double comdisprice, Long comnum, String comimg, String comrank,
 			String comdescribe) {
 		super();
