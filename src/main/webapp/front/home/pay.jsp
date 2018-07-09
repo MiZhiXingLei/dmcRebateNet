@@ -23,10 +23,14 @@
 
 <script type="text/javascript">
 	$(function(){
+		query();
+	})
+	
+	function query(){
 		$.ajax({
 			url:"${pageContext.request.contextPath}/userOrder/showOrder",
-			data:{"userId":${sessionScope.member.memberId}},
-			 success :function (result){
+			data:{"userId":${sessionScope.member.memberId}}, 
+			success :function (result){
         	     if(result != null){
         	    	 console.log(result);
         	    	 $("#mainlist ul").each(function(index,element){
@@ -35,10 +39,11 @@
 		             $.each(result,function(index,type){
 					 var box ='<ul class="item-content clearfix"><div class="pay-phone"><li class="td td-item"><div class="item-info"><div class="item-basic-info"><a href="introduction.html" class="item-title J_MakePoint" data-point="tbcart.8.11">'+type.ordername+'</a>'
 					 +'</div></div></li><li class="td td-info"><div class="item-props"><span class="sku-line">'+type.orderrank+'</span></div></li><li class="td td-price"><div class="item-price price-promo-promo"><div class="price-content"><em class="J_Price price-now">'+type.orderprice+'</em>'
-					 +'</div></div></li></div><li class="td td-amount"><div class="amount-wrapper "><div class="item-amount "><span class="phone-title">购买数量</span><div class="sl"><input class="min am-btn" name="" type="button" value="-" /><input class="text_box" name="" type="text" value="'+type.ordercount+'" style="width:30px;" /><input class="add am-btn" name="" type="button" value="+" />'
-					 +'</div></div></div></li><li class="td td-sum"><div class="td-inner"><em tabindex="0" class="J_ItemSum number">'+type.orderprice+'</em></div></li><li class="td td-oplist"><div class="td-inner"><span class="phone-title">配送方式</span><div class="pay-logis">'
+					 +'</div></div></li></div><li class="td td-amount"><div class="amount-wrapper "><div class="item-amount "><span class="phone-title">购买数量</span><div class="sl"><input class="min am-btn" onclick="upd('+type.orderid+','+type.orderprice+','+(type.ordercount-1)+')" type="button" value="-" /><input class="text_box" onchange="upd('+type.orderid+','+type.orderprice+',$(this).val())" type="text" value="'+type.ordercount+'" style="width:30px;" /><input class="add am-btn" onclick="upd('+type.orderid+','+type.orderprice+','+(type.ordercount+1)+')" type="button" value="+" />'
+					 +'</div></div></div></li><li class="td td-sum"><div class="td-inner"><em tabindex="0" class="J_ItemSum number">'+type.orderprototamt+'</em></div></li><li class="td td-oplist"><div class="td-inner"><span class="phone-title">配送方式</span><div class="pay-logis">'
 					 +'快递<b class="sys_item_freprice">10</b>元</div></div></li></ul>';
 		             $("#mainlist").append(box); 
+		             getAllSum();
 		             });
         	     }
 	        },
@@ -46,8 +51,39 @@
 	    	    layer.msg('服务器连接失败!',{icon: 1});
 		    }
 		});
-	})
-
+	}
+ 
+	/* 修改商品信息 */
+	function upd(orderid, orderprice, ordercount){
+		if(ordercount<1){
+			ordercount = 1;
+		}
+		var prototamt = orderprice*ordercount;
+		$.ajax({
+		    url:"${pageContext.request.contextPath}/userOrder/updateNum/"+orderid+"/"+ordercount+"/"+prototamt,
+	        type:"PUT",
+	        dataType:"json",
+	        success :function (result){
+	        	if(true == result){
+	        		query();
+	        	}
+	        },
+	        error:function (){
+	    	    layer.msg('服务器连接失败!',{icon: 1});
+		    }
+		});
+	}
+	
+	function getAllSum(){
+		$.ajax({
+			url:"${pageContext.request.contextPath}/userOrder/queryAllSum",
+			data:{"userId":${sessionScope.member.memberId}}, 
+			success :function (result){
+				$("#J_ActualFee").html(result);
+				$("#J_ActualFee2").html(result);
+			}
+		});
+	}
 </script>
 	
 	</head>
@@ -333,7 +369,7 @@
 							<!--含运费小计 -->
 							<div class="buy-point-discharge ">
 								<p class="price g_price ">
-									合计（含运费） <span>¥</span><em class="pay-sum">244.00</em>
+									合计（含运费） <span>¥</span><em id="J_ActualFee2" class="pay-sum">244.00</em>
 								</p>
 							</div>
 

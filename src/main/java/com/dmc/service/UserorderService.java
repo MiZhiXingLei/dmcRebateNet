@@ -19,6 +19,19 @@ public interface UserorderService {
 	 */
 	List<Userorder> selectByUserId(Long userId);
 	
+	/**
+     * 获取商品的总价
+     * @param userid
+     * @return
+     */
+    double selectAllSum(Long userid);
 	
+    /**
+     * 修改商品的数量
+     * @param record
+     * @return
+     */
+    int updateNumByPrimaryKey(Userorder record);
+    
 	List<Userorder> selectAll();
 }

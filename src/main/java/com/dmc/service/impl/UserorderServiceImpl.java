@@ -37,4 +37,26 @@ public class UserorderServiceImpl implements UserorderService {
 		return um.selectAll();
 	}
 
+	/**
+     * 获取商品的总价
+     * @param userid
+     * @return
+     */
+	@Override
+	public double selectAllSum(Long userid) {
+		// TODO Auto-generated method stub
+		return um.selectAllSum(userid);
+	}
+
+	/**
+     * 修改商品的数量
+     * @param record
+     * @return
+     */
+	@Override
+	public int updateNumByPrimaryKey(Userorder record) {
+		// TODO Auto-generated method stub
+		return um.updateNumByPrimaryKey(record);
+	}
+
 }

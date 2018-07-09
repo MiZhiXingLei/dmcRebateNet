@@ -9,6 +9,7 @@
     <result column="orderRank" jdbcType="VARCHAR" property="orderrank" />
     <result column="userId" jdbcType="BIGINT" property="userid" />
     <result column="orderState" jdbcType="INTEGER" property="orderstate" />
+    <result column="orderPrototamt" jdbcType="DECIMAL" property="orderprototamt" />
   </resultMap>
   <sql id="Base_Column_List">
     orderId, orderName, orderPrice, orderCount, orderRank, userId, orderState
@@ -18,6 +19,10 @@
     where userId = #{userid,jdbcType=BIGINT}
   </select>
   
+ <!-- 获取用户购物车的总价 -->
+  <select id="selectAllSum" resultType="double">
+    SELECT SUM(s.orderPrototamt) allSum FROM userorder s WHERE userId = #{userid,jdbcType=BIGINT}
+  </select>
   
   <select id="selectAll" resultMap="BaseResultMap">
   	select * from userorder
@@ -115,6 +120,14 @@
       orderRank = #{orderrank,jdbcType=VARCHAR},
       userId = #{userid,jdbcType=BIGINT},
       orderState = #{orderstate,jdbcType=INTEGER}
+    where orderId = #{orderid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 修改商品的数量 -->
+  <update id="updateNumByPrimaryKey" parameterType="com.dmc.entity.Userorder">
+    update userorder
+    set orderCount = #{ordercount,jdbcType=INTEGER},
+      orderPrototamt = #{orderprototamt,jdbcType=DECIMAL}
     where orderId = #{orderid,jdbcType=INTEGER}
   </update>
 </mapper>

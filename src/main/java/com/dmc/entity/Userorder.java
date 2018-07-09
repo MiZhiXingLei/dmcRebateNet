@@ -22,8 +22,18 @@ public class Userorder implements Serializable{
     private Long userid;
 
     private Integer orderstate;
+    
+    private Double orderprototamt;
 
-    public Integer getOrderid() {
+    public Double getOrderprototamt() {
+		return orderprototamt;
+	}
+
+	public void setOrderprototamt(Double orderprototamt) {
+		this.orderprototamt = orderprototamt;
+	}
+
+	public Integer getOrderid() {
         return orderid;
     }
 
@@ -81,6 +91,13 @@ public class Userorder implements Serializable{
     
 	public Userorder() {
 		super();
+	}
+
+	public Userorder(Integer orderid, Integer ordercount, Double orderprototamt) {
+		super();
+		this.orderid = orderid;
+		this.ordercount = ordercount;
+		this.orderprototamt = orderprototamt;
 	}
 
 	public Userorder(String ordername, Double orderprice, Integer ordercount, String orderrank, Long userid) {
